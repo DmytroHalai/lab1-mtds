@@ -18,23 +18,23 @@ class InputHandler {
                 throw new IllegalArgumentException("Error: Empty file.");
             }
 
-            String[] parts = fileScanner.nextLine().split(" ");
+            String[] parts = fileScanner.nextLine().trim().split("\\s+");
             if (parts.length != ARGS_AMOUNT) {
-                throw new IllegalArgumentException("Error: Expected 3 numbers in file, got " + parts.length);
+                throw new IllegalArgumentException("Error: Expected " + ARGS_AMOUNT + " numbers in file, got " + parts.length);
             }
 
-            double[] coefficients = new double[3];
-            for (int i = 0; i < ARGS_AMOUNT; i++) {
-                try {
-                    coefficients[i] = Double.parseDouble(parts[i]);
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Error: Invalid number format in file: " + parts[i]);
-                }
-            }
-            return coefficients;
+            return parseCoefficients(parts);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Error: File not found: " + filename);
         }
+    }
+
+    private static double[] parseCoefficients(String[] parts) {
+        double[] coefficients = new double[ARGS_AMOUNT];
+        for (int i = 0; i < ARGS_AMOUNT; i++) {
+            coefficients[i] = checkValidInput(parts[i]);
+        }
+        return coefficients;
     }
 
     private static double getValidDouble(Scanner scanner, String varName) {
@@ -42,10 +42,18 @@ class InputHandler {
             System.out.print(varName + " = ");
             String input = scanner.next();
             try {
-                return Double.parseDouble(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Error. Expected a valid real number, got \"" + input + "\" instead.");
+                return checkValidInput(input);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + " Try again.");
             }
+        }
+    }
+
+    private static double checkValidInput(String input){
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Error. Expected a valid real number, got \"" + input + "\" instead.");
         }
     }
 }
