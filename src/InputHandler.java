@@ -3,9 +3,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class InputHandler {
+    static final int ARGS_AMOUNT = 3;
     public static double[] getCoefficients(Scanner scanner) {
-        double[] coefficients = new double[3];
-        for (int i = 0; i < 3; i++) {
+        double[] coefficients = new double[ARGS_AMOUNT];
+        for (int i = 0; i < ARGS_AMOUNT; i++) {
             coefficients[i] = getValidDouble(scanner, "Coefficient " + (char) ('a' + i));
         }
         return coefficients;
@@ -18,12 +19,12 @@ class InputHandler {
             }
 
             String[] parts = fileScanner.nextLine().split(" ");
-            if (parts.length != 3) {
+            if (parts.length != ARGS_AMOUNT) {
                 throw new IllegalArgumentException("Error: Expected 3 numbers in file, got " + parts.length);
             }
 
             double[] coefficients = new double[3];
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < ARGS_AMOUNT; i++) {
                 try {
                     coefficients[i] = Double.parseDouble(parts[i]);
                 } catch (NumberFormatException e) {
