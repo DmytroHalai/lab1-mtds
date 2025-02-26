@@ -16,6 +16,8 @@ class InputHandler {
         try (Scanner fileScanner = new Scanner(new File(filename))) {
             if (!fileScanner.hasNextLine()) {
                 throw new IllegalArgumentException("Error: Empty file.");
+            }
+
             String[] parts = fileScanner.nextLine().trim().split("\\s+");
             if (parts.length != ARGS_AMOUNT) {
                 throw new IllegalArgumentException("Error: Expected " + ARGS_AMOUNT + " numbers in file, got " + parts.length);
