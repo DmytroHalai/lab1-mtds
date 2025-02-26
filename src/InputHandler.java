@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 class InputHandler {
@@ -7,6 +9,31 @@ class InputHandler {
             coefficients[i] = getValidDouble(scanner, "Coefficient " + (char) ('a' + i));
         }
         return coefficients;
+    }
+
+    public static double[] getCoefficientsFromFile(String filename) {
+        try (Scanner fileScanner = new Scanner(new File(filename))) {
+            if (!fileScanner.hasNextLine()) {
+                throw new IllegalArgumentException("Error: Empty file.");
+            }
+
+            String[] parts = fileScanner.nextLine().split(" ");
+            if (parts.length != 3) {
+                throw new IllegalArgumentException("Error: Expected 3 numbers in file, got " + parts.length);
+            }
+
+            double[] coefficients = new double[3];
+            for (int i = 0; i < 3; i++) {
+                try {
+                    coefficients[i] = Double.parseDouble(parts[i]);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("Error: Invalid number format in file: " + parts[i]);
+                }
+            }
+            return coefficients;
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Error: File not found: " + filename);
+        }
     }
 
     private static double getValidDouble(Scanner scanner, String varName) {
